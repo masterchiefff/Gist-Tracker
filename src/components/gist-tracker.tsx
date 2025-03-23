@@ -340,244 +340,240 @@ export function GistTracker() {
           </div>
         </div>
       </header>
-      <div className="container px-4 py-6 flex-1">
-        <div className="md:hidden mb-4">
-          <div className="relative flex w-full items-center">
-            <Search className="absolute left-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search gists..."
-              className="pl-8 w-full"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+      <div className="flex-1 flex justify-center px-4 py-6">
+        <div className="w-full max-w-7xl">
+          <div className="md:hidden mb-4">
+            <div className="relative flex w-full items-center">
+              <Search className="absolute left-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Search gists..."
+                className="pl-8 w-full"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
           </div>
-        </div>
-        <div className="flex flex-col md:flex-row gap-6">
-          <aside className="hidden md:flex flex-col w-[240px] gap-4">
-            <nav className="grid gap-2">
-              <Button variant="ghost" className="justify-start gap-2">
-                <User className="h-4 w-4" />
-                Profile
-              </Button>
-              <Button
-                variant={activeTab === "starred" ? "secondary" : "ghost"}
-                className="justify-start gap-2"
-                onClick={() => setActiveTab("starred")}
-              >
-                <Star className="h-4 w-4" />
-                Starred
-                {starredGists.length > 0 && (
-                  <span className="ml-auto bg-primary/10 text-primary text-xs px-2 py-0.5 rounded-full">
-                    {starredGists.length}
-                  </span>
-                )}
-              </Button>
-              <Button
-                variant={activeTab === "favorites" ? "secondary" : "ghost"}
-                className="justify-start gap-2"
-                onClick={() => setActiveTab("favorites")}
-              >
-                <Heart className="h-4 w-4" />
-                Favorites
-                {favoriteGists.length > 0 && (
-                  <span className="ml-auto bg-primary/10 text-primary text-xs px-2 py-0.5 rounded-full">
-                    {favoriteGists.length}
-                  </span>
-                )}
-              </Button>
-              <Button variant="ghost" className="justify-start gap-2">
-                <BookOpen className="h-4 w-4" />
-                Documentation
-              </Button>
-            </nav>
-          </aside>
-          <main className="flex-1">
-            <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <div className="flex justify-between items-center mb-4">
-                <TabsList className="bg-card border">
-                  <TabsTrigger
-                    value="all"
-                    className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-                  >
-                    All Gists
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="starred"
-                    className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-                  >
-                    Starred
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="forked"
-                    className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-                  >
-                    Forked
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="favorites"
-                    className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-                  >
-                    Favorites
-                  </TabsTrigger>
-                </TabsList>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    if (!isLoggedIn) {
-                      openLoginModal()
-                      return
-                    }
-                    toast("Create Gist", {
-                      description: "This feature is coming soon!",
-                    })
-                  }}
-                >
-                  <Code className="mr-2 h-4 w-4" />
-                  New Gist
+          <div className="flex flex-col md:flex-row gap-6">
+            <aside className="hidden md:flex flex-col w-[240px] gap-4">
+              <nav className="grid gap-2">
+                <Button variant="ghost" className="justify-start gap-2">
+                  <User className="h-4 w-4" />
+                  Profile
                 </Button>
-              </div>
-              <TabsContent value="all" className="space-y-4">
-                {displayedGists().length > 0 ? (
-                  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {displayedGists().map((gist) => (
-                      <GistCard
-                        key={gist.id}
-                        gist={gist}
-                        onView={() => openGistViewer(gist)}
-                        isStarred={starredGists.includes(gist.id)}
-                        isForked={forkedGists.includes(gist.id)}
-                        isFavorite={favoriteGists.includes(gist.id)}
-                        onToggleStar={(e) => toggleStar(e, gist.id)}
-                        onToggleFork={(e) => toggleFork(e, gist.id)}
-                        onToggleFavorite={(e) => toggleFavorite(e, gist.id)}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center py-12">
-                    <p className="text-muted-foreground">No gists found matching your search.</p>
-                  </div>
-                )}
-              </TabsContent>
-              <TabsContent value="starred" className="space-y-4">
-                {displayedGists().length > 0 ? (
-                  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {displayedGists().map((gist) => (
-                      <GistCard
-                        key={gist.id}
-                        gist={gist}
-                        onView={() => openGistViewer(gist)}
-                        isStarred={starredGists.includes(gist.id)}
-                        isForked={forkedGists.includes(gist.id)}
-                        isFavorite={favoriteGists.includes(gist.id)}
-                        onToggleStar={(e) => toggleStar(e, gist.id)}
-                        onToggleFork={(e) => toggleFork(e, gist.id)}
-                        onToggleFavorite={(e) => toggleFavorite(e, gist.id)}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center py-12">
-                    <p className="text-muted-foreground">No starred gists yet.</p>
-                    {isLoggedIn ? (
-                      <p className="text-sm text-muted-foreground mt-2">Star gists to save them for later.</p>
-                    ) : (
-                      <Button variant="outline" className="mt-4" onClick={openLoginModal}>
-                        <Github className="mr-2 h-4 w-4" />
-                        Sign in to star gists
-                      </Button>
-                    )}
-                  </div>
-                )}
-              </TabsContent>
-              <TabsContent value="forked" className="space-y-4">
-                {displayedGists().length > 0 ? (
-                  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {displayedGists().map((gist) => (
-                      <GistCard
-                        key={gist.id}
-                        gist={gist}
-                        onView={() => openGistViewer(gist)}
-                        isStarred={starredGists.includes(gist.id)}
-                        isForked={forkedGists.includes(gist.id)}
-                        isFavorite={favoriteGists.includes(gist.id)}
-                        onToggleStar={(e) => toggleStar(e, gist.id)}
-                        onToggleFork={(e) => toggleFork(e, gist.id)}
-                        onToggleFavorite={(e) => toggleFavorite(e, gist.id)}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center py-12">
-                    <p className="text-muted-foreground">No forked gists yet.</p>
-                    {isLoggedIn ? (
-                      <p className="text-sm text-muted-foreground mt-2">Fork gists to create your own copy.</p>
-                    ) : (
-                      <Button variant="outline" className="mt-4" onClick={openLoginModal}>
-                        <Github className="mr-2 h-4 w-4" />
-                        Sign in to fork gists
-                      </Button>
-                    )}
-                  </div>
-                )}
-              </TabsContent>
-              <TabsContent value="favorites" className="space-y-4">
-                {displayedGists().length > 0 ? (
-                  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {displayedGists().map((gist) => (
-                      <GistCard
-                        key={gist.id}
-                        gist={gist}
-                        onView={() => openGistViewer(gist)}
-                        isStarred={starredGists.includes(gist.id)}
-                        isForked={forkedGists.includes(gist.id)}
-                        isFavorite={favoriteGists.includes(gist.id)}
-                        onToggleStar={(e) => toggleStar(e, gist.id)}
-                        onToggleFork={(e) => toggleFork(e, gist.id)}
-                        onToggleFavorite={(e) => toggleFavorite(e, gist.id)}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center py-12">
-                    <p className="text-muted-foreground">No favorite gists yet.</p>
-                    {isLoggedIn ? (
-                      <p className="text-sm text-muted-foreground mt-2">
-                        Add gists to your favorites for quick access.
-                      </p>
-                    ) : (
-                      <Button variant="outline" className="mt-4" onClick={openLoginModal}>
-                        <Github className="mr-2 h-4 w-4" />
-                        Sign in to add favorites
-                      </Button>
-                    )}
-                  </div>
-                )}
-              </TabsContent>
-            </Tabs>
-          </main>
+                <Button
+                  variant={activeTab === "starred" ? "secondary" : "ghost"}
+                  className="justify-start gap-2"
+                  onClick={() => setActiveTab("starred")}
+                >
+                  <Star className="h-4 w-4" />
+                  Starred
+                  {starredGists.length > 0 && (
+                    <span className="ml-auto bg-primary/10 text-primary text-xs px-2 py-0.5 rounded-full">
+                      {starredGists.length}
+                    </span>
+                  )}
+                </Button>
+                <Button
+                  variant={activeTab === "favorites" ? "secondary" : "ghost"}
+                  className="justify-start gap-2"
+                  onClick={() => setActiveTab("favorites")}
+                >
+                  <Heart className="h-4 w-4" />
+                  Favorites
+                  {favoriteGists.length > 0 && (
+                    <span className="ml-auto bg-primary/10 text-primary text-xs px-2 py-0.5 rounded-full">
+                      {favoriteGists.length}
+                    </span>
+                  )}
+                </Button>
+                <Button variant="ghost" className="justify-start gap-2">
+                  <BookOpen className="h-4 w-4" />
+                  Documentation
+                </Button>
+              </nav>
+            </aside>
+            <main className="flex-1">
+              <Tabs value={activeTab} onValueChange={setActiveTab}>
+                <div className="flex justify-between items-center mb-4">
+                  <TabsList className="bg-card border">
+                    <TabsTrigger
+                      value="all"
+                      className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                    >
+                      All Gists
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="starred"
+                      className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                    >
+                      Starred
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="forked"
+                      className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                    >
+                      Forked
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="favorites"
+                      className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                    >
+                      Favorites
+                    </TabsTrigger>
+                  </TabsList>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      if (!isLoggedIn) {
+                        openLoginModal()
+                        return
+                      }
+                      toast("Create Gist", {
+                        description: "This feature is coming soon!",
+                      })
+                    }}
+                  >
+                    <Code className="mr-2 h-4 w-4" />
+                    New Gist
+                  </Button>
+                </div>
+                <TabsContent value="all" className="space-y-4">
+                  {displayedGists().length > 0 ? (
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                      {displayedGists().map((gist) => (
+                        <GistCard
+                          key={gist.id}
+                          gist={gist}
+                          onView={() => openGistViewer(gist)}
+                          isStarred={starredGists.includes(gist.id)}
+                          isForked={forkedGists.includes(gist.id)}
+                          isFavorite={favoriteGists.includes(gist.id)}
+                          onToggleStar={(e) => toggleStar(e, gist.id)}
+                          onToggleFork={(e) => toggleFork(e, gist.id)}
+                          onToggleFavorite={(e) => toggleFavorite(e, gist.id)}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center py-12">
+                      <p className="text-muted-foreground">No gists found matching your search.</p>
+                    </div>
+                  )}
+                </TabsContent>
+                <TabsContent value="starred" className="space-y-4">
+                  {displayedGists().length > 0 ? (
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                      {displayedGists().map((gist) => (
+                        <GistCard
+                          key={gist.id}
+                          gist={gist}
+                          onView={() => openGistViewer(gist)}
+                          isStarred={starredGists.includes(gist.id)}
+                          isForked={forkedGists.includes(gist.id)}
+                          isFavorite={favoriteGists.includes(gist.id)}
+                          onToggleStar={(e) => toggleStar(e, gist.id)}
+                          onToggleFork={(e) => toggleFork(e, gist.id)}
+                          onToggleFavorite={(e) => toggleFavorite(e, gist.id)}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center py-12">
+                      <p className="text-muted-foreground">No starred gists yet.</p>
+                      {isLoggedIn ? (
+                        <p className="text-sm text-muted-foreground mt-2">Star gists to save them for later.</p>
+                      ) : (
+                        <Button variant="outline" className="mt-4" onClick={openLoginModal}>
+                          <Github className="mr-2 h-4 w-4" />
+                          Sign in to star gists
+                        </Button>
+                      )}
+                    </div>
+                  )}
+                </TabsContent>
+                <TabsContent value="forked" className="space-y-4">
+                  {displayedGists().length > 0 ? (
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                      {displayedGists().map((gist) => (
+                        <GistCard
+                          key={gist.id}
+                          gist={gist}
+                          onView={() => openGistViewer(gist)}
+                          isStarred={starredGists.includes(gist.id)}
+                          isForked={forkedGists.includes(gist.id)}
+                          isFavorite={favoriteGists.includes(gist.id)}
+                          onToggleStar={(e) => toggleStar(e, gist.id)}
+                          onToggleFork={(e) => toggleFork(e, gist.id)}
+                          onToggleFavorite={(e) => toggleFavorite(e, gist.id)}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center py-12">
+                      <p className="text-muted-foreground">No forked gists yet.</p>
+                      {isLoggedIn ? (
+                        <p className="text-sm text-muted-foreground mt-2">Fork gists to create your own copy.</p>
+                      ) : (
+                        <Button variant="outline" className="mt-4" onClick={openLoginModal}>
+                          <Github className="mr-2 h-4 w-4" />
+                          Sign in to fork gists
+                        </Button>
+                      )}
+                    </div>
+                  )}
+                </TabsContent>
+                <TabsContent value="favorites" className="space-y-4">
+                  {displayedGists().length > 0 ? (
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                      {displayedGists().map((gist) => (
+                        <GistCard
+                          key={gist.id}
+                          gist={gist}
+                          onView={() => openGistViewer(gist)}
+                          isStarred={starredGists.includes(gist.id)}
+                          isForked={forkedGists.includes(gist.id)}
+                          isFavorite={favoriteGists.includes(gist.id)}
+                          onToggleStar={(e) => toggleStar(e, gist.id)}
+                          onToggleFork={(e) => toggleFork(e, gist.id)}
+                          onToggleFavorite={(e) => toggleFavorite(e, gist.id)}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center py-12">
+                      <p className="text-muted-foreground">No favorite gists yet.</p>
+                      {isLoggedIn ? (
+                        <p className="text-sm text-muted-foreground mt-2">
+                          Add gists to your favorites for quick access.
+                        </p>
+                      ) : (
+                        <Button variant="outline" className="mt-4" onClick={openLoginModal}>
+                          <Github className="mr-2 h-4 w-4" />
+                          Sign in to add favorites
+                        </Button>
+                      )}
+                    </div>
+                  )}
+                </TabsContent>
+              </Tabs>
+            </main>
+          </div>
         </div>
       </div>
       <footer className="border-t py-4 bg-background">
         <div className="container px-4 text-center text-sm text-muted-foreground">
-          &copy; {new Date().getFullYear()} GitHub Gist Tracker.
+          © {new Date().getFullYear()} GitHub Gist Tracker.
         </div>
       </footer>
-
-      {/* Gist Viewer Modal */}
       <GistViewer isOpen={isGistViewerOpen} onClose={closeGistViewer} gist={selectedGist} />
-
-      {/* Login Modal */}
       <LoginModal
         isOpen={isLoginModalOpen}
         onClose={closeLoginModal}
         onLogin={handleLogin}
         onGithubLogin={handleGithubLogin}
       />
-
-      {/* Sonner Toast Provider */}
       <SonnerProvider />
     </div>
   )
